@@ -1,28 +1,49 @@
 class Solution {
-    HashSet <List<Integer>> set = new HashSet<>();
+
     public List<List<Integer>> permuteUnique(int[] nums) {
-        boolean used[] = new boolean[nums.length];
-        permute(new ArrayList<Integer>(),nums, used);
-        return new ArrayList(set);
+        List<List<Integer>> results = new ArrayList<>();
+
+        // count the occurrence of each number
+        HashMap<Integer, Integer> counter = new HashMap<>();
+        for (int num : nums) {
+            if (!counter.containsKey(num))
+                counter.put(num, 0);
+            counter.put(num, counter.get(num) + 1);
+        }
+
+        LinkedList<Integer> comb = new LinkedList<>();
+        this.backtrack(comb, nums.length, counter, results);
+        return results;
     }
-    
-    public void permute(List<Integer> permutation, int []nums,  boolean used[]){
-                
-        if(permutation.size() == nums.length){
-            set.add(new ArrayList<Integer>(permutation));
+
+    protected void backtrack(
+            LinkedList<Integer> comb,
+            Integer N,
+            HashMap<Integer, Integer> counter,
+            List<List<Integer>> results) {
+
+        if (comb.size() == N) {
+            // make a deep copy of the resulting permutation,
+            // since the permutation would be backtracked later.
+            results.add(new ArrayList<Integer>(comb));
             return;
         }
 
-        for(int i = 0; i < nums.length; i++){
-            if(!used[i]){
-                permutation.add(nums[i]);
-                used[i] = true;
-                permute(permutation, nums, used);
-                permutation.remove(permutation.size()-1);
-                used[i] =false;
-            }
+        for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
+            Integer num = entry.getKey();
+            Integer count = entry.getValue();
+            if (count == 0)
+                continue;
+            // add this number into the current combination
+            comb.addLast(num);
+            counter.put(num, count - 1);
 
+            // continue the exploration
+            backtrack(comb, N, counter, results);
+
+            // revert the choice for the next exploration
+            comb.removeLast();
+            counter.put(num, count);
         }
-        
     }
 }
