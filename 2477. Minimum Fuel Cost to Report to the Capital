@@ -1,0 +1,36 @@
+class Solution {
+    long long answer = 0;
+public:
+    long long minimumFuelCost(vector<vector<int>>& roads, int seats) {
+        int n = roads.size() + 1;
+        vector<vector<int>> g(n);
+        for (auto road: roads) {
+            int a = road[0], b = road[1];
+           
+            g[a].push_back(b);
+            g[b].push_back(a);
+        }
+
+       
+
+        dfs(0, -1, g, seats);
+        return answer;
+    }
+
+    int dfs(int node, int parent, vector<vector<int>>& g, int seats) {
+        int person = 1;
+        for (int nbr : g[node]) {
+            if (nbr == parent) {
+                continue;
+            }
+
+            person += dfs(nbr, node, g, seats);
+        }
+
+        if (node != 0) {
+            answer += ceil((double)person/seats);
+        }
+
+        return person;
+    }
+};
