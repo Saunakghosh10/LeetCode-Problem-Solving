@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>>finaldata(n,vector<int>(n,0));
+        int soc=0,sor=0,eor=n-1,eoc=n-1,count=1;
+        while(soc<=eoc && sor<=eor)
+        {
+            for(int x=soc;x<=eoc;x++)
+            {
+                finaldata[sor][x]=count;
+                count++;
+            }
+            sor++;
+            for(int x=sor;x<=eor;x++)
+            {
+                finaldata[x][eoc]=count;
+                count++;
+            }
+            eoc--;
+            for(int x=eoc;x>=soc;x--)
+            {
+                finaldata[eor][x]=count;
+                count++;
+            }
+            eor--;
+            for(int x=eor;x>=sor;x--)
+            {
+                finaldata[x][soc]=count;
+                count++;
+            }
+            soc++;
+        }
+        return finaldata;
+    }
+};
+IF YOU LOVE YOUR MOTHER UPVOTE!!!
