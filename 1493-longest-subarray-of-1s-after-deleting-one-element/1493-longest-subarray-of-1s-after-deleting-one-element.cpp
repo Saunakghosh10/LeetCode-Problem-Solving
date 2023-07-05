@@ -6,8 +6,8 @@ public:
         int longestWindow = 0;
         // Left end of the window.
         int start = 0;
-        
-        for (int i = 0; i < nums.size(); i++) {
+        int n = nums.size() ; 
+        for (int i = 0; i < n ; i++) {
             zeroCount += (nums[i] == 0);
                           
             // Shrink the window until the zero counts come under the limit.
