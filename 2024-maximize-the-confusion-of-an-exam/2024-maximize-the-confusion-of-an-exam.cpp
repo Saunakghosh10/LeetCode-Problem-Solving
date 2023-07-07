@@ -1,46 +1,32 @@
 class Solution {
 public:
-    int maxConsecutiveAnswers(string answerKey, int k) {
-        int n = answerKey.length();
-        int left = k, right = n;
-        
-        while (left < right) {
-            int mid = (left + right + 1) / 2;
-            
-            if (isValid(answerKey, mid, k)) {
-                left = mid;
-            } else {
-                right = mid - 1;
+    int maxConsecutiveAnswers(string s, int k) {
+        int extra=0,mx=0;
+        int i=0,j=0;
+        while(j<s.size()){ //For consecutive TRUE
+            if(s[j]=='F'){
+                extra++;
+                while(extra>k){
+                    if(s[i]=='F')extra--;
+                    i++;
+                }
             }
+            mx = max(mx,j-i+1);
+            j++;
         }
-        
-        return left;
-    }
-    
-    bool isValid(string answerKey, int size, int k) {
-        int n = answerKey.length();
-        unordered_map<char, int> counter;
-        
-        for (int i = 0; i < size; i++) {
-            char c = answerKey[i];
-            counter[c]++;
-        }
-        
-        if (min(counter['T'], counter['F']) <= k) {
-            return true;
-        }
-        
-        for (int i = size; i < n; i++) {
-            char c1 = answerKey[i];
-            counter[c1]++;
-            char c2 = answerKey[i - size];
-            counter[c2]--;
-            
-            if (min(counter['T'], counter['F']) <= k) {
-                return true;
+        i=0;j=0;
+        extra=0;
+        while(j<s.size()){ //For consecutive FALSE
+            if(s[j]=='T'){
+                extra++;
+                while(extra>k){
+                    if(s[i]=='T')extra--;
+                    i++;
+                }
             }
+            mx = max(mx,j-i+1);
+            j++;
         }
-        
-        return false;
+        return mx;
     }
 };
